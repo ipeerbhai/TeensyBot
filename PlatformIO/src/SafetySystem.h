@@ -34,6 +34,7 @@
 // ---------------------------------------------------------------------------
 
 #include <Arduino.h>
+#include "EasyString.h"
 
 #ifndef SAFE_ONCE
 #define SAFE_ONCE
@@ -42,7 +43,9 @@
 class SafetyManager
 {
 public:
+    SafetyManager();
     SafetyManager(volatile uint32_t *tickCounter);
+    void Init(volatile uint32_t *tickCounter);
     bool IsSafe();
     bool IsConfigured(); // robot is configured or not yet?
     void SetConfigured(boolean value);

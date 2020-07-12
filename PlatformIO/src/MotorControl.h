@@ -45,7 +45,7 @@
 #ifndef MOTOR_ONCE
 #define MOTOR_ONCE
 
-typedef struct MotorControlData
+typedef struct 
 {
     int8_t EnablePin;
     int8_t DirPin;
@@ -60,7 +60,9 @@ typedef struct MotorControlData
 class MotorControl
 {
 public:
+    MotorControl();
     MotorControl(int howMany, volatile uint32_t *tickCounter, uint32_t *prevTickCounter, SafetyManager *safetyPtr);
+    void Init(int howMany, volatile uint32_t *tickCounter, uint32_t *prevTickCounter, SafetyManager *safetyPtr);
     void ConfigureMotor(int motorIndex, int8_t enablePin, int8_t dirPin, int8_t pulsePin, uint32_t interval, uint32_t dutyInterval);
     void Dispatch();
     void SafeDigitalWrite(int pin, int level);
@@ -69,8 +71,8 @@ public:
     void StopMotors();
 
 private:
-    MotorController *m_motors;
-    int m_motorCount;    // how many motors do we have? Set once, then don't change.
+    MotorController m_motors[9];
+    uint8_t m_motorCount;    // how many motors do we have? Set once, then don't change.
     int m_selectedMotor; // use this to iterate over the motors without doing an alloc.
     volatile uint32_t *m_tickCounter;
     uint32_t *m_prevTickCounter;

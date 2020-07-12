@@ -1,11 +1,25 @@
 #include "SensorSystem.h"
 
+SensorManager::SensorManager()
+{
+}
+
 SensorManager::SensorManager(int howManyUS, volatile uint32_t *tickCount, SafetyManager *safetyPtr)
 {
+    Init(howManyUS, tickCount, safetyPtr);
+}
+
+void SensorManager::Init(int howManyUS, volatile uint32_t *tickCount, SafetyManager *safetyPtr)
+{
+    Serial.println("Initializing Sensor System");
+    Serial.flush();
+
     m_safetyManager = safetyPtr; // so we can tell the sensor manager something's wrong.
     m_ultrasonicCount = howManyUS;
-    m_ultrasonics = new UltrasonicSensor[howManyUS];
     m_tickCount = tickCount;
+
+    Serial.println("Sensor system initialized");
+    Serial.flush();
 }
 
 void SensorManager::ConfigureUltrasonic(int sensorIndex, uint8_t echoPin, uint8_t triggerPin, unsigned long maxDuration, unsigned long minDuration)

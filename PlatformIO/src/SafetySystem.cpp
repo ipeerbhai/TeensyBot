@@ -2,8 +2,21 @@
 
 //-----------------------------------------------------------------------------------------
 // Constructor:
+//  Default constructor does nothing.
+SafetyManager::SafetyManager()
+{
+}
+//-----------------------------------------------------------------------------------------
+// Constructor:
 //  Reset the safety system and store a reference to the global tick counter.
 SafetyManager::SafetyManager(volatile uint32_t *tickCounter)
+{
+    Init(tickCounter);
+}
+
+//-----------------------------------------------------------------------------------------
+// Init initializes instance members.
+void SafetyManager::Init(volatile uint32_t *tickCounter)
 {
     m_tickCounter = tickCounter;
     m_watchDogRequestcount = 0;
@@ -32,7 +45,7 @@ bool SafetyManager::IsSafe()
 //  IsConfigured verifies we got a valid configuration from the host PC.
 bool SafetyManager::IsConfigured()
 {
-    return(m_IsConfigured);
+    return (m_IsConfigured);
 }
 
 //-----------------------------------------------------------------------------------------

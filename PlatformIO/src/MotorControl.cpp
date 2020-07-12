@@ -2,19 +2,34 @@
 
 // --------------------------------------------------------------------------------------------------------------------
 // Constructor:
+//  MotorControl blank constructor -- just to initialize a pointer, but not be a ready to use class.
+MotorControl::MotorControl()
+{
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+// Constructor:
 //  MotorControl is a class that defines tick-counts needed to control different types of motors.
 MotorControl::MotorControl(int howMany, volatile uint32_t *tickCounter, uint32_t *prevTickCounter, SafetyManager *safetyPtr)
 {
-    // create an array of motors
-    m_motors = new MotorController[howMany];
-    m_motorCount = howMany;
+    Init(howMany, tickCounter, prevTickCounter, safetyPtr);
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+// Procedure:
+//  Initialize the instance
+void MotorControl::Init(int howMany, volatile uint32_t *tickCounter, uint32_t *prevTickCounter, SafetyManager *safetyPtr)
+{
+
+    m_motorCount = (uint8_t)howMany;
     m_tickCounter = tickCounter;
     m_prevTickCounter = prevTickCounter;
     m_selectedMotor = 0;
 
     // grab pointer to the global safety manager.
     m_safetyManager = safetyPtr;
-
+    Serial.println("Motor system Initialized");
+    Serial.flush();
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -22,6 +37,8 @@ MotorControl::MotorControl(int howMany, volatile uint32_t *tickCounter, uint32_t
 //  Configure a specific motor.
 void MotorControl::ConfigureMotor(int motorIndex, int8_t enablePin, int8_t dirPin, int8_t pulsePin, uint32_t interval, uint32_t dutyInterval)
 {
+    Serial.println("Configuring Specific Motor");
+    Serial.flush();
     // only run if the motor index is between 0 and motorcount -1
     if ((motorIndex < 0) || (motorIndex >= m_motorCount))
     {
@@ -133,10 +150,10 @@ void MotorControl::SetMotorState(int motorId, int state)
 //  This sets all variabled to 0 to halt all motor signals.
 void MotorControl::StopMotors()
 {
-  // set all duty intervals to 0, forcing a pull-down whenever the ISR fires.
-  int motorCounter = 0;
-  for (motorCounter = 0; motorCounter < m_motorCount; motorCounter++)
-  {
-    SetMotorState(motorCounter, LOW);
-  }
+    // set all duty intervals to 0, forcing a pull-down whenever the ISR fires.
+    int motorCounter = 0;
+    for (motorCounter = 0; motorCounter < m_motorCount; motorCounter++)
+    {
+        SetMotorState(motorCounter, LOW);
+    }
 }

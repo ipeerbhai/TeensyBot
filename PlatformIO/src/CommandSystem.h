@@ -35,6 +35,7 @@
 #include "MotorControl.h"
 #include "SensorSystem.h"
 #include "SafetySystem.h"
+#include "EasyString.h"
 
 #ifndef COMMAND_ONCE
 #define COMMAND_ONCE
@@ -44,13 +45,15 @@
 class CommandManager
 {
 public:
+    CommandManager();
     CommandManager(MotorControl *motorSystem, volatile uint32_t *tickCounter, uint32_t *prevTickCounter, SensorManager *sensorSystem, SafetyManager *safetySystem);
+    void Init(MotorControl *motorSystem, volatile uint32_t *tickCounter, uint32_t *prevTickCounter, SensorManager *sensorSystem, SafetyManager *safetySystem);
     void ProcessCommandBuffer();
     boolean ReadSerialPortData();
     void Dispatch();
 
 private:
-    String m_commandBuffer;         // for string handling
+    EasyString m_commandBuffer;         // for string handling
     MotorControl *m_motorControl;   // to hold the motor system
     SensorManager *m_sensorManager; // to talk with the sensor system
     SafetyManager *m_safetyManager; // to talk with the safety system

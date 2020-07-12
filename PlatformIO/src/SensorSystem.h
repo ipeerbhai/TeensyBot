@@ -74,7 +74,9 @@ struct UltrasonicSensor
 class SensorManager
 {
 public:
+    SensorManager();
     SensorManager(int howManyUS, volatile uint32_t *tickCount, SafetyManager *safetyPtr);
+    void Init(int howManyUS, volatile uint32_t *tickCount, SafetyManager *safetyPtr);
     void ConfigureUltrasonic(int sensorIndex, uint8_t echoPin, uint8_t TriggerPin, unsigned long maxDuration, unsigned long minDuration);
     void ConfigureBattery(int pin); // what analog pin is the battery voltage divider attached to?
     uint8_t GetBatteryLevel(); // returns a best-guess representing percent 0..100
@@ -82,7 +84,7 @@ public:
     String ReadLatestUltrasonicState(); // returns a JSON object with the last processed state of every sensor.
     void Dispatch(); // actually run the sensors and update the state machine.
 private:
-    UltrasonicSensor *m_ultrasonics; // a ptr to the array of ultrasonic sensors.
+    UltrasonicSensor m_ultrasonics[12]; // array of ultrasonic sensors.
     int m_ultrasonicCount; // how many do we have attached to robot?
     int m_selectedSensor; // use for iterating or working with an individual ultrasonic sensor.
     int m_batteryPin; // use for reading the battery level.
